@@ -4,638 +4,559 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vidal-Gadea Lab Research Impact Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: Arial, sans-serif;
             font-size: 11pt;
-            margin: 0;
+            background: #f5f5f5;
             padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            color: #333;
         }
         
         .container {
             max-width: 1400px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
             padding: 40px;
-            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
-        .header h1 {
-            margin: 0;
-            font-size: 2.5em;
-            font-weight: 300;
+        header {
+            border-bottom: 3px solid #c8102e;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
         }
         
-        .header p {
-            margin: 10px 0 0 0;
-            opacity: 0.9;
-            font-size: 1.1em;
+        h1 {
+            font-size: 28pt;
+            color: #c8102e;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 14pt;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .update-date {
+            font-size: 10pt;
+            color: #999;
+            margin-top: 10px;
         }
         
         .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            padding: 40px;
-        }
-        
-        .metric-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            border-left: 5px solid #3498db;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .metric-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-        }
-        
-        .metric-card.publications { border-left-color: #e74c3c; }
-        .metric-card.grants { border-left-color: #27ae60; }
-        .metric-card.citations { border-left-color: #f39c12; }
-        .metric-card.collaborations { border-left-color: #9b59b6; }
-        .metric-card.impact { border-left-color: #1abc9c; }
-        .metric-card.service { border-left-color: #34495e; }
-        
-        .metric-title {
-            font-size: 1.3em;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #2c3e50;
-        }
-        
-        .metric-value {
-            font-size: 3em;
-            font-weight: bold;
-            color: #3498db;
-            margin-bottom: 15px;
-        }
-        
-        .metric-card.publications .metric-value { color: #e74c3c; }
-        .metric-card.grants .metric-value { color: #27ae60; }
-        .metric-card.citations .metric-value { color: #f39c12; }
-        .metric-card.collaborations .metric-value { color: #9b59b6; }
-        .metric-card.impact .metric-value { color: #1abc9c; }
-        .metric-card.service .metric-value { color: #34495e; }
-        
-        .metric-details {
-            font-size: 0.9em;
-            color: #7f8c8d;
-            line-height: 1.6;
-        }
-        
-        .metric-details a {
-            color: #2980b9;
-            text-decoration: none;
-            border-bottom: 1px dotted #2980b9;
-        }
-        
-        .metric-details a:hover {
-            text-decoration: none;
-            border-bottom: 1px solid #2980b9;
-            background-color: rgba(41, 128, 185, 0.1);
-        }
-        
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #ecf0f1;
-            border-radius: 4px;
-            margin: 15px 0;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #3498db, #2980b9);
-            border-radius: 4px;
-            transition: width 2s ease;
-        }
-        
-        .publications .progress-fill { background: linear-gradient(90deg, #e74c3c, #c0392b); }
-        .grants .progress-fill { background: linear-gradient(90deg, #27ae60, #229954); }
-        .citations .progress-fill { background: linear-gradient(90deg, #f39c12, #d68910); }
-        .collaborations .progress-fill { background: linear-gradient(90deg, #9b59b6, #8e44ad); }
-        .impact .progress-fill { background: linear-gradient(90deg, #1abc9c, #17a085); }
-        .service .progress-fill { background: linear-gradient(90deg, #34495e, #2c3e50); }
-        
-        .timeline-section {
-            background: #f8f9fa;
-            padding: 40px;
-        }
-        
-        .timeline-title {
-            text-align: center;
-            font-size: 2em;
-            color: #2c3e50;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
             margin-bottom: 40px;
         }
         
-        .timeline {
-            position: relative;
-            max-width: 1000px;
-            margin: 0 auto;
+        .metric-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #c8102e;
         }
         
-        .timeline::after {
-            content: '';
-            position: absolute;
-            width: 4px;
-            background: #3498db;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            margin-left: -2px;
+        .metric-value {
+            font-size: 32pt;
+            font-weight: bold;
+            color: #c8102e;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 11pt;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+        }
+        
+        h2 {
+            font-size: 18pt;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 30px;
+        }
+        
+        .timeline {
+            margin: 30px 0;
         }
         
         .timeline-item {
-            padding: 20px 40px;
+            padding: 15px 0;
+            border-left: 3px solid #e0e0e0;
+            padding-left: 25px;
+            margin-left: 10px;
             position: relative;
-            background: inherit;
-            width: 50%;
         }
         
-        .timeline-item::after {
+        .timeline-item::before {
             content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            right: -10px;
-            background: white;
-            border: 4px solid #3498db;
-            top: 25px;
+            width: 12px;
+            height: 12px;
+            background: #c8102e;
             border-radius: 50%;
-            z-index: 1;
-        }
-        
-        .timeline-item.award::after {
-            border-color: #DAA520;
-        }
-        
-        .timeline-item.foundation::after {
-            border-color: #2c3e50;
-            background: #2c3e50;
-        }
-        
-        .left {
-            left: 0;
-        }
-        
-        .right {
-            left: 50%;
-        }
-        
-        .right::after {
-            left: -10px;
-        }
-        
-        .timeline-content {
-            padding: 20px 30px;
-            background: white;
-            position: relative;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        
-        .timeline-content.award {
-            border-left: 5px solid #DAA520;
-        }
-        
-        .timeline-content.foundation {
-            border-left: 5px solid #2c3e50;
-            background: #f8f9fa;
+            position: absolute;
+            left: -8px;
+            top: 20px;
         }
         
         .timeline-year {
-            font-size: 1.4em;
             font-weight: bold;
-            color: #3498db;
-            margin-bottom: 10px;
+            color: #c8102e;
+            font-size: 12pt;
         }
         
-        .timeline-year.award {
-            color: #DAA520;
+        .timeline-content {
+            color: #666;
+            margin-top: 5px;
         }
         
-        .timeline-year.foundation {
-            color: #2c3e50;
-            font-weight: bold;
-        }
-        
-        .timeline-achievement {
-            font-size: 1.1em;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-        
-        .collaboration-network {
-            padding: 40px;
-            background: white;
-        }
-        
-        .network-title {
-            text-align: center;
-            font-size: 2em;
-            color: #2c3e50;
-            margin-bottom: 30px;
-        }
-        
-        .network-grid {
+        .impact-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
+            margin-top: 20px;
         }
         
-        .collaboration-item {
-            background: #f8f9fa;
+        .impact-item {
+            background: #f9f9f9;
             padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
         }
         
-        .collaboration-item:hover {
-            border-color: #3498db;
-            background: white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .institution-name {
+        .impact-number {
+            font-size: 24pt;
             font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 10px;
+            color: #c8102e;
         }
         
-        .collaboration-count {
-            font-size: 1.5em;
-            color: #3498db;
-            font-weight: bold;
+        .impact-description {
+            color: #666;
+            margin-top: 5px;
         }
         
-        .collaboration-count a {
-            color: #3498db;
-            text-decoration: none;
-            border-bottom: 1px dotted #3498db;
-        }
-        
-        .collaboration-count a:hover {
-            text-decoration: none;
-            border-bottom: 1px solid #3498db;
-            background-color: rgba(52, 152, 219, 0.1);
-        }
-        
-        .sources-section {
-            background: #f8f9fa;
-            padding: 40px;
-            border-top: 3px solid #3498db;
-        }
-        
-        .sources-title {
-            text-align: center;
-            font-size: 1.8em;
-            color: #2c3e50;
-            margin-bottom: 30px;
-        }
-        
-        .sources-content {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        
-        .sources-grid {
+        .two-column {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
         }
         
-        .source-item {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #3498db;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .source-name {
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-        
-        .source-link {
-            font-size: 0.9em;
-            color: #3498db;
-        }
-        
-        .source-link a {
-            color: #3498db;
-            text-decoration: none;
-        }
-        
-        .source-link a:hover {
-            text-decoration: underline;
-        }
-        
-        @media screen and (max-width: 768px) {
-            .timeline::after {
-                left: 31px;
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
             }
             
-            .timeline-item {
-                width: 100%;
-                padding-left: 70px;
-                padding-right: 25px;
-            }
-            
-            .timeline-item::before {
-                left: 60px;
-                border: medium solid white;
-                border-width: 10px 10px 10px 0;
-                border-color: transparent white transparent transparent;
-            }
-            
-            .left::after, .right::after {
-                left: 21px;
-            }
-            
-            .right {
-                left: 0%;
+            .container {
+                padding: 20px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
+        <header>
             <h1>Vidal-Gadea Lab Research Impact</h1>
-            <p>C. elegans Neuroethology, Human Muscle Culture & Translational Research (2015-2025)</p>
-        </div>
-        
+            <div class="subtitle">Molecular Neuroethology Laboratory</div>
+            <div class="subtitle">Illinois State University, 2015-2025</div>
+            <div class="update-date">Last updated: October 2025</div>
+        </header>
+
         <div class="metrics-grid">
-            <div class="metric-card publications">
-                <div class="metric-title">Publications</div>
-                <div class="metric-value">28</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 85%"></div>
-                </div>
-                <div class="metric-details">
-                    20 peer-reviewed articles<br>
-                    8 preprints & book chapters<br>
-                    8 high-impact publications (IF≥5)<br>
-                    Average IF: 4.0
-                </div>
+            <div class="metric-card">
+                <div class="metric-value">$1.47M</div>
+                <div class="metric-label">Total Funding (PI)</div>
             </div>
-            
-            <div class="metric-card grants">
-                <div class="metric-title">Grant Funding</div>
-                <div class="metric-value">$1.53M</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 78%"></div>
-                </div>
-                <div class="metric-details">
-                    3 major grants funded<br>
-                    2 NIH R15 grants ($891K)<br>
-                    1 NSF grant ($638K)<br>
-                    Strong renewal track record
-                </div>
+            <div class="metric-card">
+                <div class="metric-value">29</div>
+                <div class="metric-label">Publications</div>
             </div>
-            
-            <div class="metric-card citations">
-                <div class="metric-title">Impact Factor Efficiency</div>
-                <div class="metric-value">$19.1K</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 90%"></div>
-                </div>
-                <div class="metric-details">
-                    Dollars per Impact Factor point<br>
-                    <a href="https://docs.google.com/document/d/1FIkysgubmkkE1KECuc29xLl1JQVUulz4Amkgd-kQiAY/edit" target="_blank">2.7× more efficient than R1 median</a><br>
-                    2.2× more efficient than R2 median<br>
-                    1.6× more efficient than C. elegans labs
-                </div>
+            <div class="metric-card">
+                <div class="metric-value">913</div>
+                <div class="metric-label">Citations</div>
             </div>
-            
-            <div class="metric-card collaborations">
-                <div class="metric-title">Student Training Excellence</div>
-                <div class="metric-value">189</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 95%"></div>
-                </div>
-                <div class="metric-details">
-                    Top 1st percentile performance<br>
-                    2.5-4x higher than <a href="https://carnegieclassifications.iu.edu/" target="_blank">R2 average</a><br>
-                    92% STEM career success (top 5%)<br>
-                    1.2 presentations per student (top range)
-                </div>
+            <div class="metric-card">
+                <div class="metric-value">220</div>
+                <div class="metric-label">Students Mentored</div>
             </div>
-            
-            <div class="metric-card impact">
-                <div class="metric-title">Cost Efficiency Leadership</div>
-                <div class="metric-value">$8.1K</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 90%"></div>
-                </div>
-                <div class="metric-details">
-                    Cost per student trained<br>
-                    vs <a href="https://reporter.nih.gov/" target="_blank">$15-30K at R1 institutions</a><br>
-                    189 students from $1.53M funding<br>
-                    Exceptional ROI for training
-                </div>
+            <div class="metric-card">
+                <div class="metric-value">14</div>
+                <div class="metric-label">h-index</div>
             </div>
-            
-            <div class="metric-card service">
-                <div class="metric-title">Professional Service</div>
-                <div class="metric-value">50+</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 85%"></div>
-                </div>
-                <div class="metric-details">
-                    Reviews for Nature, Science, PNAS<br>
-                    Grant reviews: NSF (MCB), DoD, NIH<br>
-                    International: BBSRC (UK), BSF (Israel)<br>
-                    NCN (Poland), AFM (France)
-                </div>
+            <div class="metric-card">
+                <div class="metric-value">4.1</div>
+                <div class="metric-label">Avg Impact Factor</div>
             </div>
         </div>
-        
-        <div class="timeline-section">
-            <h2 class="timeline-title">Research Milestones</h2>
+
+        <div class="section">
+            <h2>Career Milestones</h2>
             <div class="timeline">
-                <div class="timeline-item left">
-                    <div class="timeline-content">
-                        <div class="timeline-year">2022</div>
-                        <div class="timeline-achievement">NIH R15 grant renewal funded ($438K)</div>
-                        <div class="timeline-achievement">Currently funding lab operations</div>
-                    </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2015</div>
+                    <div class="timeline-content">Started as Assistant Professor, Illinois State University</div>
                 </div>
-                <div class="timeline-item right">
-                    <div class="timeline-content">
-                        <div class="timeline-year">2020</div>
-                        <div class="timeline-achievement">Continued publication excellence</div>
-                        <div class="timeline-achievement">Multiple high-impact discoveries</div>
-                    </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2015</div>
+                    <div class="timeline-content">eLife publication on magnetosensation (Featured in Nature Reviews, NPR, Scientific American)</div>
                 </div>
-                <div class="timeline-item left">
-                    <div class="timeline-content">
-                        <div class="timeline-year">2019</div>
-                        <div class="timeline-achievement">PNAS publication on exercise & DMD</div>
-                        <div class="timeline-achievement">Major clinical implications discovered</div>
-                    </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2016</div>
+                    <div class="timeline-content">First NIH R15 Award ($403K)</div>
                 </div>
-                <div class="timeline-item right award">
-                    <div class="timeline-content award">
-                        <div class="timeline-year award">2018</div>
-                        <div class="timeline-achievement">STEM Professional Excellence Award</div>
-                        <div class="timeline-achievement">NSF grant awarded ($638K)</div>
-                    </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2018</div>
+                    <div class="timeline-content">NSF MCB Grant ($639K), Outstanding STEM Professional Award</div>
                 </div>
-                <div class="timeline-item left">
-                    <div class="timeline-content">
-                        <div class="timeline-year">2017</div>
-                        <div class="timeline-achievement">Research program expansion</div>
-                        <div class="timeline-achievement">Growing publication portfolio</div>
-                    </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2019</div>
+                    <div class="timeline-content">PNAS publication on DMD pathophysiology, Promoted to Associate Professor (effective 2020)</div>
                 </div>
-                <div class="timeline-item right">
-                    <div class="timeline-content">
-                        <div class="timeline-year">2016</div>
-                        <div class="timeline-achievement">First NIH R15 grant ($453K)</div>
-                        <div class="timeline-achievement">Major federal funding milestone</div>
-                    </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2020</div>
+                    <div class="timeline-content">Researchers to Know, Illinois Science & Technology Coalition</div>
                 </div>
-                <div class="timeline-item left">
-                    <div class="timeline-content">
-                        <div class="timeline-year">2015</div>
-                        <div class="timeline-achievement">eLife publication breakthrough</div>
-                        <div class="timeline-achievement">Magnetic field detection in C. elegans</div>
-                    </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2021</div>
+                    <div class="timeline-content">Million Dollar Club</div>
                 </div>
-                <div class="timeline-item right foundation">
-                    <div class="timeline-content foundation">
-                        <div class="timeline-year foundation">Lab Establishment</div>
-                        <div class="timeline-achievement">Vidal-Gadea Lab founded</div>
-                        <div class="timeline-achievement">Research program initiated</div>
-                    </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2022</div>
+                    <div class="timeline-content">Second NIH Award ($375K)</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2024</div>
+                    <div class="timeline-content">Outstanding College Researcher Award, eLife validation paper</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2025</div>
+                    <div class="timeline-content">Promoted to Full Professor</div>
                 </div>
             </div>
         </div>
-        
-        <div class="collaboration-network">
-            <h2 class="network-title">Professional Network & Excellence</h2>
-            <div class="network-grid">
-                <div class="collaboration-item">
-                    <div class="institution-name">Professional Societies</div>
-                    <div class="collaboration-count">GSA, INS, SFN member</div>
+
+        <div class="section">
+            <h2>Research Productivity (2015-2025)</h2>
+            <div class="two-column">
+                <div class="chart-container">
+                    <canvas id="publicationsChart"></canvas>
                 </div>
-                <div class="collaboration-item">
-                    <div class="institution-name">D/IF Excellence</div>
-                    <div class="collaboration-count"><a href="https://docs.google.com/document/d/1FIkysgubmkkE1KECuc29xLl1JQVUulz4Amkgd-kQiAY/edit" target="_blank">$19.1K per IF point</a></div>
-                </div>
-                <div class="collaboration-item">
-                    <div class="institution-name">Cost Efficiency Leader</div>
-                    <div class="collaboration-count">$8.1K per student vs <a href="https://reporter.nih.gov/" target="_blank">$15-30K R1</a></div>
-                </div>
-                <div class="collaboration-item">
-                    <div class="institution-name">Student Training Excellence</div>
-                    <div class="collaboration-count"><a href="https://agvg75.github.io/vidal-gadea-lab-dashboard/" target="_blank">189 students mentored</a></div>
-                </div>
-                <div class="collaboration-item">
-                    <div class="institution-name">Research Quality</div>
-                    <div class="collaboration-count">PNAS, eLife, top-tier journals</div>
-                </div>
-                <div class="collaboration-item">
-                    <div class="institution-name">Outperforms Specialized Labs</div>
-                    <div class="collaboration-count"><a href="https://docs.google.com/document/d/1FIkysgubmkkE1KECuc29xLl1JQVUulz4Amkgd-kQiAY/edit" target="_blank">1.6× better than C. elegans labs</a></div>
+                <div class="chart-container">
+                    <canvas id="cumulativePubsChart"></canvas>
                 </div>
             </div>
         </div>
-        
-        <div class="sources-section">
-            <h2 class="sources-title">Data Sources & Verification</h2>
-            <div class="sources-content">
-                <p><strong>Comparison benchmarks derived from:</strong></p>
-                <div class="sources-grid">
-                    <div class="source-item">
-                        <div class="source-name">Comprehensive D/IF Analysis</div>
-                        <div class="source-link"><a href="https://docs.google.com/document/d/1FIkysgubmkkE1KECuc29xLl1JQVUulz4Amkgd-kQiAY/edit" target="_blank">Multi-source benchmarking study</a> - Dollars per Impact Factor comparative analysis</div>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-name">NIH RePORTER Database</div>
-                        <div class="source-link"><a href="https://reporter.nih.gov/" target="_blank">reporter.nih.gov</a> - Grant funding verification</div>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-name">NSF Award Search</div>
-                        <div class="source-link"><a href="https://www.nsf.gov/awardsearch/" target="_blank">nsf.gov/awardsearch</a> - Federal funding records</div>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-name">Carnegie Classification</div>
-                        <div class="source-link"><a href="https://carnegieclassifications.iu.edu/" target="_blank">carnegieclassifications.iu.edu</a> - R1/R2 institutional data</div>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-name">Student Dashboard</div>
-                        <div class="source-link"><a href="https://agvg75.github.io/vidal-gadea-lab-dashboard/" target="_blank">agvg75.github.io/vidal-gadea-lab-dashboard</a> - Live tracking</div>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-name">Journal Citation Reports</div>
-                        <div class="source-link"><a href="https://jcr.clarivate.com/" target="_blank">jcr.clarivate.com</a> - Impact Factor verification</div>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-name">Council of Undergraduate Research</div>
-                        <div class="source-link"><a href="https://www.cur.org/" target="_blank">cur.org</a> - National undergraduate research statistics</div>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-name">Association of American Universities</div>
-                        <div class="source-link"><a href="https://www.aau.edu/" target="_blank">aau.edu</a> - R1 university performance data</div>
-                    </div>
+
+        <div class="section">
+            <h2>Funding Trajectory</h2>
+            <div class="chart-container">
+                <canvas id="fundingChart"></canvas>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Student Mentorship</h2>
+            <div class="chart-container">
+                <canvas id="cumulativeStudentsChart"></canvas>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Research Impact</h2>
+            <div class="impact-grid">
+                <div class="impact-item">
+                    <div class="impact-number">66+</div>
+                    <div class="impact-description">Student co-authorships on peer-reviewed publications</div>
                 </div>
-                <p style="margin-top: 20px; font-size: 0.9em; color: #7f8c8d; font-style: italic;">
-                    All metrics verified through multiple independent sources. Conservative estimates used where data incomplete. 
-                    Methodology detailed in comprehensive lab productivity analysis reports.
-                </p>
+                <div class="impact-item">
+                    <div class="impact-number">200+</div>
+                    <div class="impact-description">Conference presentations by trainees</div>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-number">90%+</div>
+                    <div class="impact-description">STEM career placement rate</div>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-number">71</div>
+                    <div class="impact-description">Research videos (35K+ educational views)</div>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-number">3</div>
+                    <div class="impact-description">Integrated research programs with clinical applications</div>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-number">6</div>
+                    <div class="impact-description">Major media features (NPR, NBC, Nature Reviews, Scientific American)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Citation Impact Over Time</h2>
+            <div class="chart-container">
+                <canvas id="citationsChart"></canvas>
             </div>
         </div>
     </div>
 
     <script>
-        // Animate progress bars on page load
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                const progressBars = document.querySelectorAll('.progress-fill');
-                progressBars.forEach(bar => {
-                    const width = bar.style.width;
-                    bar.style.width = '0%';
-                    setTimeout(() => {
-                        bar.style.width = width;
-                    }, 500);
-                });
-            }, 500);
+        const colors = {
+            primary: '#c8102e',
+            secondary: '#333333',
+            accent: '#666666',
+            light: '#e0e0e0'
+        };
+
+        // Publications per year (actual data from CV)
+        const pubYears = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
+        const pubCounts = [3, 2, 0, 1, 2, 1, 3, 4, 2, 2, 2];
+
+        new Chart(document.getElementById('publicationsChart'), {
+            type: 'bar',
+            data: {
+                labels: pubYears,
+                datasets: [{
+                    label: 'Publications',
+                    data: pubCounts,
+                    backgroundColor: colors.primary,
+                    borderColor: colors.primary,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Publications per Year',
+                        font: { size: 14 }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 }
+                    }
+                }
+            }
         });
 
-        // Add hover effects to timeline items
-        const timelineItems = document.querySelectorAll('.timeline-item');
-        timelineItems.forEach(item => {
-            item.addEventListener('mouseenter', function() {
-                this.style.transform = 'scale(1.02)';
-                this.style.transition = 'transform 0.3s ease';
-            });
-            
-            item.addEventListener('mouseleave', function() {
-                this.style.transform = 'scale(1)';
-            });
+        // Cumulative publications
+        const cumulativePubs = pubCounts.reduce((acc, val, i) => {
+            acc.push((acc[i-1] || 0) + val);
+            return acc;
+        }, []);
+
+        new Chart(document.getElementById('cumulativePubsChart'), {
+            type: 'line',
+            data: {
+                labels: pubYears,
+                datasets: [{
+                    label: 'Cumulative Publications',
+                    data: cumulativePubs,
+                    borderColor: colors.primary,
+                    backgroundColor: 'rgba(200, 16, 46, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 4,
+                    pointBackgroundColor: colors.primary
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Cumulative Publications',
+                        font: { size: 14 }
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Funding timeline (active grants by year)
+        const fundingYears = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
+        const startup = [58333, 58333, 58334, 0, 0, 0, 0, 0, 0, 0, 0];
+        const nihR15 = [0, 100777, 100777, 100777, 100778, 0, 0, 0, 0, 0, 0];
+        const nsfMCB = [0, 0, 0, 106434, 106434, 106434, 106434, 106434, 106434, 0, 0];
+        const nihNIAMS = [0, 0, 0, 0, 0, 0, 0, 93848, 93848, 93848, 93849];
+
+        new Chart(document.getElementById('fundingChart'), {
+            type: 'bar',
+            data: {
+                labels: fundingYears,
+                datasets: [
+                    {
+                        label: 'Startup (2015-2017)',
+                        data: startup,
+                        backgroundColor: '#999999'
+                    },
+                    {
+                        label: 'NIH R15 (2016-2019)',
+                        data: nihR15,
+                        backgroundColor: '#c8102e'
+                    },
+                    {
+                        label: 'NSF MCB (2018-2024)',
+                        data: nsfMCB,
+                        backgroundColor: '#333333'
+                    },
+                    {
+                        label: 'NIH NIAMS (2022-2025)',
+                        data: nihNIAMS,
+                        backgroundColor: '#666666'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Active Grant Funding by Year',
+                        font: { size: 14 }
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    x: { stacked: true },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + (value/1000).toFixed(0) + 'K';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Cumulative students by level (exact data from lab records)
+        const cumulativeYears = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
+        const cumulativePostdoc = [0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2];
+        const cumulativeGrad = [2, 3, 6, 9, 10, 12, 13, 18, 18, 20, 20];
+        const cumulativeUG = [22, 41, 56, 66, 81, 85, 89, 95, 97, 104, 114];
+        const cumulativeHS = [7, 23, 34, 37, 59, 60, 67, 77, 79, 80, 84];
+
+        new Chart(document.getElementById('cumulativeStudentsChart'), {
+            type: 'bar',
+            data: {
+                labels: cumulativeYears,
+                datasets: [
+                    {
+                        label: 'High School',
+                        data: cumulativeHS,
+                        backgroundColor: '#cccccc'
+                    },
+                    {
+                        label: 'Undergraduate',
+                        data: cumulativeUG,
+                        backgroundColor: '#999999'
+                    },
+                    {
+                        label: 'Graduate',
+                        data: cumulativeGrad,
+                        backgroundColor: '#666666'
+                    },
+                    {
+                        label: 'Postdoctoral',
+                        data: cumulativePostdoc,
+                        backgroundColor: '#c8102e'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Cumulative Students Mentored by Level',
+                        font: { size: 14 }
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    x: { stacked: true },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Cumulative Students'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Citations over time (estimated trajectory)
+        const citationYears = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
+        const citationCounts = [45, 68, 92, 115, 145, 178, 235, 310, 425, 580, 913];
+
+        new Chart(document.getElementById('citationsChart'), {
+            type: 'line',
+            data: {
+                labels: citationYears,
+                datasets: [{
+                    label: 'Total Citations',
+                    data: citationCounts,
+                    borderColor: colors.primary,
+                    backgroundColor: 'rgba(200, 16, 46, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 5,
+                    pointBackgroundColor: colors.primary
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Cumulative Citations (Estimated Growth Pattern)',
+                        font: { size: 14 }
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
         });
     </script>
 </body>
