@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vidal-Gadea Lab Research Impact Dashboard</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
@@ -29,511 +29,682 @@
         }
         
         header {
-            border-bottom: 3px solid #c8102e;
-            padding-bottom: 20px;
+            text-align: center;
             margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #C8102E;
         }
         
         h1 {
+            color: #C8102E;
             font-size: 28pt;
-            color: #c8102e;
             margin-bottom: 10px;
         }
         
         .subtitle {
-            font-size: 14pt;
+            font-size: 12pt;
             color: #666;
             margin-bottom: 5px;
         }
         
-        .update-date {
+        .tagline {
+            font-size: 13pt;
+            color: #C8102E;
+            font-weight: bold;
+            margin-top: 15px;
+            font-style: italic;
+        }
+        
+        .last-updated {
             font-size: 10pt;
             color: #999;
+            font-style: italic;
             margin-top: 10px;
+        }
+        
+        .career-timeline {
+            background: linear-gradient(135deg, #2c5aa0 0%, #1a3a6b 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        
+        .timeline-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .timeline-year {
+            font-size: 18pt;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-label {
+            font-size: 10pt;
+            opacity: 0.9;
         }
         
         .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-bottom: 40px;
         }
         
         .metric-card {
-            background: #f9f9f9;
-            padding: 20px;
-            border-left: 4px solid #c8102e;
+            background: linear-gradient(135deg, #C8102E 0%, #8B0000 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .metric-value {
-            font-size: 32pt;
+            font-size: 36pt;
             font-weight: bold;
-            color: #c8102e;
-            line-height: 1;
             margin-bottom: 5px;
         }
         
         .metric-label {
             font-size: 11pt;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            opacity: 0.9;
         }
         
         .section {
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
         
         h2 {
+            color: #C8102E;
             font-size: 18pt;
-            color: #333;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #e0e0e0;
+            border-bottom: 2px solid #C8102E;
         }
         
-        .chart-container {
-            position: relative;
-            height: 400px;
+        .philosophy-box {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
+            border-left: 5px solid #C8102E;
             margin-bottom: 30px;
+            font-size: 11pt;
+            line-height: 1.6;
         }
         
-        .timeline {
-            margin: 30px 0;
+        .philosophy-box h3 {
+            color: #C8102E;
+            font-size: 14pt;
+            margin-bottom: 15px;
         }
         
-        .timeline-item {
-            padding: 15px 0;
-            border-left: 3px solid #e0e0e0;
-            padding-left: 25px;
-            margin-left: 10px;
-            position: relative;
+        .three-pillars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
         
-        .timeline-item::before {
-            content: '';
-            width: 12px;
-            height: 12px;
-            background: #c8102e;
-            border-radius: 50%;
-            position: absolute;
-            left: -8px;
-            top: 20px;
+        .pillar-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            border-top: 4px solid #C8102E;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
-        .timeline-year {
+        .pillar-number {
+            font-size: 24pt;
             font-weight: bold;
-            color: #c8102e;
-            font-size: 12pt;
+            color: #C8102E;
+            margin-bottom: 10px;
         }
         
-        .timeline-content {
+        .pillar-title {
+            font-size: 13pt;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .pillar-content {
+            font-size: 10pt;
+            line-height: 1.5;
             color: #666;
+        }
+        
+        .pillar-examples {
+            margin-top: 10px;
+            padding-left: 15px;
+            border-left: 2px solid #C8102E;
+            font-size: 10pt;
+            color: #555;
+        }
+        
+        .awards-list {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .award-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-left: 4px solid #C8102E;
+            border-radius: 3px;
+        }
+        
+        .award-year {
+            font-weight: bold;
+            color: #C8102E;
+            font-size: 11pt;
+        }
+        
+        .award-title {
+            font-size: 11pt;
             margin-top: 5px;
         }
         
-        .impact-grid {
+        .publication-list {
+            margin-top: 15px;
+        }
+        
+        .publication-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            border-left: 3px solid #C8102E;
+        }
+        
+        .pub-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 11pt;
+        }
+        
+        .pub-authors {
+            color: #666;
+            font-size: 10pt;
+            margin-bottom: 3px;
+        }
+        
+        .pub-journal {
+            color: #C8102E;
+            font-size: 10pt;
+            font-style: italic;
+        }
+        
+        .tool-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
         
-        .impact-item {
+        .tool-card {
             background: #f9f9f9;
             padding: 20px;
+            border-radius: 5px;
+            border-top: 4px solid #2c5aa0;
         }
         
-        .impact-number {
-            font-size: 24pt;
+        .tool-category {
             font-weight: bold;
-            color: #c8102e;
+            color: #2c5aa0;
+            margin-bottom: 10px;
+            font-size: 11pt;
         }
         
-        .impact-description {
+        .tool-description {
+            font-size: 10pt;
+            line-height: 1.5;
+        }
+        
+        .funding-section {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .grant-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 3px;
+            border-left: 4px solid #C8102E;
+        }
+        
+        .grant-title {
+            font-weight: bold;
+            font-size: 11pt;
+            margin-bottom: 5px;
+        }
+        
+        .grant-details {
             color: #666;
-            margin-top: 5px;
+            font-size: 10pt;
         }
         
-        .two-column {
+        .chart-container {
+            height: 400px;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        
+        .mentoring-highlight {
+            background: linear-gradient(135deg, #2c5aa0 0%, #1a3a6b 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .mentoring-stats {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
         
-        @media (max-width: 768px) {
-            .two-column {
-                grid-template-columns: 1fr;
-            }
-            
-            .container {
-                padding: 20px;
-            }
+        .mentoring-stat {
+            text-align: center;
+        }
+        
+        .mentoring-stat-value {
+            font-size: 32pt;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .mentoring-stat-label {
+            font-size: 10pt;
+            opacity: 0.9;
+        }
+        
+        .dashboard-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: white;
+            color: #2c5aa0;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 10pt;
+        }
+        
+        .dashboard-link:hover {
+            background: #f0f0f0;
+        }
+        
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 10pt;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Vidal-Gadea Lab Research Impact</h1>
-            <div class="subtitle">Molecular Neuroethology Laboratory</div>
-            <div class="subtitle">Illinois State University, 2015-2025</div>
-            <div class="update-date">Last updated: October 2025</div>
+            <h1>Vidal-Gadea Lab Research Impact Dashboard</h1>
+            <div class="subtitle">Professor Andrés G. Vidal-Gadea, Ph.D.</div>
+            <div class="subtitle">School of Biological Sciences, Illinois State University</div>
+            <div class="last-updated">Last updated: December 2025</div>
         </header>
+
+        <div class="career-timeline">
+            <div class="timeline-item">
+                <div class="timeline-year">2015</div>
+                <div class="timeline-label">Started Lab<br>Assistant Professor</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2020</div>
+                <div class="timeline-label">Promoted<br>Associate Professor</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2025</div>
+                <div class="timeline-label">Promoted<br>Full Professor</div>
+            </div>
+        </div>
 
         <div class="metrics-grid">
             <div class="metric-card">
-                <div class="metric-value">$1.47M</div>
-                <div class="metric-label">Total Funding (PI)</div>
+                <div class="metric-value">30</div>
+                <div class="metric-label">Peer-Reviewed Publications</div>
             </div>
             <div class="metric-card">
-                <div class="metric-value">29</div>
-                <div class="metric-label">Publications</div>
+                <div class="metric-value">962</div>
+                <div class="metric-label">Total Citations</div>
             </div>
             <div class="metric-card">
-                <div class="metric-value">913</div>
-                <div class="metric-label">Citations</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">220</div>
-                <div class="metric-label">Students Mentored</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">14</div>
+                <div class="metric-value">15</div>
                 <div class="metric-label">h-index</div>
             </div>
             <div class="metric-card">
-                <div class="metric-value">4.1</div>
-                <div class="metric-label">Avg Impact Factor</div>
+                <div class="metric-value">$1.47M</div>
+                <div class="metric-label">Total Research Funding (PI)</div>
             </div>
         </div>
 
-        <div class="section">
-            <h2>Career Milestones</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-year">2015</div>
-                    <div class="timeline-content">Started as Assistant Professor, Illinois State University</div>
+        <section class="section">
+            <h2>Research Philosophy</h2>
+            <div class="philosophy-box">
+                <p>Our lab investigates how animals interact with the physical world. We focus on specific physical variables that living systems must detect, respond to, and survive: mechanical forces, magnetic fields, gravity, and temperature. We ask how animals sense these parameters, how they generate and withstand forces, and what happens when these systems fail in disease.</p>
+                <p style="margin-top: 15px;">Understanding these interactions requires developing new approaches to measure and manipulate them. Our lab builds behavioral assays, measurement systems, and molecular tools that enable quantitative analysis of organism-environment interactions. This approach bridges basic discovery with translational applications to neuromuscular disease and extreme environments.</p>
+            </div>
+
+            <div class="three-pillars">
+                <div class="pillar-card">
+                    <div class="pillar-number">1</div>
+                    <div class="pillar-title">Physical Interactions</div>
+                    <div class="pillar-content">
+                        Which physical parameters matter to living systems?
+                    </div>
+                    <div class="pillar-examples">
+                        Mechanical forces, magnetic fields, gravity, temperature. The subset of physics that organisms evolved to detect and respond to.
+                    </div>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-year">2015</div>
-                    <div class="timeline-content">eLife publication on magnetosensation (Featured in Nature Reviews, NPR, Scientific American)</div>
+
+                <div class="pillar-card">
+                    <div class="pillar-number">2</div>
+                    <div class="pillar-title">Mechanisms & Pathology</div>
+                    <div class="pillar-content">
+                        How do these interactions work, and what happens when they fail?
+                    </div>
+                    <div class="pillar-examples">
+                        Sensory transduction (magnetosensation, mechanoreception, thermosensation). Force generation (muscle contraction, locomotion). Disease states (DMD, calcium dysregulation).
+                    </div>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-year">2016</div>
-                    <div class="timeline-content">First NIH R15 Award ($403K)</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-year">2018</div>
-                    <div class="timeline-content">NSF MCB Grant ($639K), Outstanding STEM Professional Award</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-year">2019</div>
-                    <div class="timeline-content">PNAS publication on DMD pathophysiology, Promoted to Associate Professor (effective 2020)</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-year">2020</div>
-                    <div class="timeline-content">Researchers to Know, Illinois Science & Technology Coalition</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-year">2021</div>
-                    <div class="timeline-content">Million Dollar Club</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-year">2022</div>
-                    <div class="timeline-content">Second NIH Award ($375K)</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-year">2024</div>
-                    <div class="timeline-content">Outstanding College Researcher Award, eLife validation paper</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-year">2025</div>
-                    <div class="timeline-content">Promoted to Full Professor</div>
+
+                <div class="pillar-card">
+                    <div class="pillar-number">3</div>
+                    <div class="pillar-title">Tools & Methods</div>
+                    <div class="pillar-content">
+                        Developing approaches to measure and manipulate
+                    </div>
+                    <div class="pillar-examples">
+                        Novel behavioral assays, measurement systems, molecular reporters, mathematical models. Open access tools and protocols for research and education.
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="section">
-            <h2>Research Productivity (2015-2025)</h2>
-            <div class="two-column">
-                <div class="chart-container">
-                    <canvas id="publicationsChart"></canvas>
+        <section class="section">
+            <h2>Research Tools & Innovation</h2>
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <div class="tool-category">Behavioral Assays</div>
+                    <div class="tool-description">
+                        Swim/crawl transition assay (PNAS 2011), burrowing assay for neuromuscular integrity (2015), magnetic orientation tracking systems. Custom measurement approaches for natural behaviors.
+                    </div>
                 </div>
-                <div class="chart-container">
-                    <canvas id="cumulativePubsChart"></canvas>
+
+                <div class="tool-card">
+                    <div class="tool-category">Instrumentation</div>
+                    <div class="tool-description">
+                        Custom magnetic coil systems (multiple configurations for field manipulation), magnetic pulse generators, WormBot adaptation for high throughput analysis, affordable worm tracker (open access design).
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-category">Human Muscle Physiology System (2025)</div>
+                    <div class="tool-description">
+                        Integrated system for force measurement, calcium imaging, and temperature control in 3D human skeletal muscle constructs. Synchronized electrical stimulation with multi-modal data acquisition.
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-category">Molecular Tools</div>
+                    <div class="tool-description">
+                        RGBCaMP multi-compartment calcium reporter (simultaneous cytoplasm, mitochondria, SR imaging), thermosensitive fluorescent reporters, complete dystrophin knockout strains (VG02/VG03), CRISPR generated dystrophic human myoblasts.
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-category">Method Dissemination</div>
+                    <div class="tool-description">
+                        Published protocols and book chapters, open access designs and code, YouTube video library (71 videos, 36K views), comprehensive training materials for 216+ students.
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="section">
-            <h2>Funding Trajectory</h2>
+        <section class="section">
+            <h2>Recent Awards and Recognition</h2>
+            <div class="awards-list">
+                <div class="award-item">
+                    <div class="award-year">2025</div>
+                    <div class="award-title">Outstanding University Researcher, Illinois State University</div>
+                </div>
+                <div class="award-item">
+                    <div class="award-year">2024</div>
+                    <div class="award-title">Outstanding College Researcher, Illinois State University</div>
+                </div>
+                <div class="award-item">
+                    <div class="award-year">2021</div>
+                    <div class="award-title">Million Dollar Club, Illinois State University</div>
+                </div>
+                <div class="award-item">
+                    <div class="award-year">2020</div>
+                    <div class="award-title">Researchers to Know, Illinois Science & Technology Coalition</div>
+                </div>
+                <div class="award-item">
+                    <div class="award-year">2019</div>
+                    <div class="award-title">Research Initiative Award, Illinois State University</div>
+                </div>
+                <div class="award-item">
+                    <div class="award-year">2018</div>
+                    <div class="award-title">Outstanding STEM Professional Award, McLean County Chamber of Commerce</div>
+                </div>
+                <div class="award-item">
+                    <div class="award-year">2018</div>
+                    <div class="award-title">Faculty Mentor Award, Louis Stokes Alliance for Minority Participation</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Recent Publications (2025)</h2>
+            <div class="publication-list">
+                <div class="publication-item">
+                    <div class="pub-title">Activity-dependent remodeling of muscle architecture during distinct locomotor behaviors in C. elegans</div>
+                    <div class="pub-authors">Fazyl A, Anbu A, Kollbaum S, Vidal-Gadea AG</div>
+                    <div class="pub-journal">Biology Open (2025) - Accepted</div>
+                </div>
+                <div class="publication-item">
+                    <div class="pub-title">Fibrillin-Related Proteins Control Calcium Homeostasis in Dystrophic Muscle Across Species</div>
+                    <div class="pub-authors">Marchiafava D, Vidal-Gadea AG</div>
+                    <div class="pub-journal">microPublications Biology (2025)</div>
+                </div>
+                <div class="publication-item">
+                    <div class="pub-title">Independent Validation of Transgenerational Inheritance of Learned Pathogen Avoidance in C. elegans</div>
+                    <div class="pub-authors">Akinosho A, Alexander J, Floyd K, Vidal-Gadea AG</div>
+                    <div class="pub-journal">eLife (2025)</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>High-Impact Publications</h2>
+            <div class="publication-list">
+                <div class="publication-item">
+                    <div class="pub-title">Physical exertion exacerbates decline in the musculature of an animal model of Duchenne muscular dystrophy</div>
+                    <div class="pub-authors">Hughes K, Rodriguez A, Flatt K, et al., Vidal-Gadea AG</div>
+                    <div class="pub-journal">PNAS (2019) - Featured in Medical Xpress</div>
+                </div>
+                <div class="publication-item">
+                    <div class="pub-title">Magnetosensitive neurons mediate geomagnetic orientation in C. elegans</div>
+                    <div class="pub-authors">Vidal-Gadea AG, Ward K, Beron C, et al., Pierce-Shimomura JT</div>
+                    <div class="pub-journal">eLife (2015) - Featured in Nature Reviews, NPR, Scientific American</div>
+                </div>
+                <div class="publication-item">
+                    <div class="pub-title">C. elegans selects distinct crawling and swimming gaits via dopamine and serotonin</div>
+                    <div class="pub-authors">Vidal-Gadea AG, Topper S, Young L, et al., Pierce-Shimomura JT</div>
+                    <div class="pub-journal">PNAS (2011) - Featured in Scientific American, CBS News</div>
+                </div>
+                <div class="publication-item">
+                    <div class="pub-title">Coding characteristics of spiking local interneurons during imposed limb movements in the locust</div>
+                    <div class="pub-authors">Vidal-Gadea AG, Jing XJ, Simpson D, et al., Newland PL</div>
+                    <div class="pub-journal">Journal of Neurophysiology (2010) - Wiener kernel mathematical modeling</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Active Research Grant</h2>
+            <div class="funding-section">
+                <div class="grant-item">
+                    <div class="grant-title">NIH R15 (NIAMS)</div>
+                    <div class="grant-details">2022-2025 | $375,393 | Genetic repair of muscular degeneration associated with Duchenne muscular dystrophy</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Research Programs</h2>
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <div class="tool-category">Duchenne Muscular Dystrophy</div>
+                    <div class="tool-description">
+                        Investigating pathophysiology using C. elegans and human myocyte models. Developed first cross-tissue DMD model and complete dystrophin knockout strains. Building force and calcium measurement systems for human muscle constructs.
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-category">Mechanotransduction</div>
+                    <div class="tool-description">
+                        Studying how organisms detect and respond to mechanical forces. PEZO-1 mechanoreceptors in muscle function, locomotion, and feeding. Proprioceptive systems in locusts using Wiener kernel analysis.
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-category">Magnetic Field Bionavigation</div>
+                    <div class="tool-description">
+                        Pioneering work on nematode magnetosensation. Identified magnetosensitive neurons and investigating molecular mechanisms. Custom magnetic coil systems and pulse generators for mechanism discovery.
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-category">Neuromuscular Systems</div>
+                    <div class="tool-description">
+                        Motor control, muscle plasticity, and neuromuscular communication. Novel behavioral assays for neuromuscular integrity. Gait selection mechanisms via neuromodulators.
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-category">Astrobiology Research</div>
+                    <div class="tool-description">
+                        Investigating multigenerational effects of simulated Martian conditions (reduced gravity and hypomagnetic fields) on C. elegans. Custom systems to manipulate physical parameters of extraterrestrial environments.
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-category">Crustacean Neurogenetics</div>
+                    <div class="tool-description">
+                        Developing first genetic tools for decapod neuroscience using marbled crayfish. Collaboration exploring neuromodulation and neural network dynamics.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Citation Growth</h2>
             <div class="chart-container">
-                <canvas id="fundingChart"></canvas>
+                <canvas id="citationChart"></canvas>
             </div>
-        </div>
+        </section>
 
-        <div class="section">
-            <h2>Student Mentorship</h2>
-            <div class="chart-container">
-                <canvas id="cumulativeStudentsChart"></canvas>
+        <section class="section">
+            <h2>Student Mentoring Excellence</h2>
+            <div class="mentoring-highlight">
+                <h3 style="margin-bottom: 20px; font-size: 16pt;">Transformative Educational Impact (2015-2025)</h3>
+                <div class="mentoring-stats">
+                    <div class="mentoring-stat">
+                        <div class="mentoring-stat-value">216</div>
+                        <div class="mentoring-stat-label">Total Students Mentored</div>
+                    </div>
+                    <div class="mentoring-stat">
+                        <div class="mentoring-stat-value">572+</div>
+                        <div class="mentoring-stat-label">Total Student Outputs</div>
+                    </div>
+                    <div class="mentoring-stat">
+                        <div class="mentoring-stat-value">200+</div>
+                        <div class="mentoring-stat-label">Conference Presentations</div>
+                    </div>
+                    <div class="mentoring-stat">
+                        <div class="mentoring-stat-value">90%+</div>
+                        <div class="mentoring-stat-label">STEM Career Placement</div>
+                    </div>
+                </div>
+                <p style="margin-top: 20px; font-size: 11pt;">
+                    Lab performance dramatically exceeds national averages: 216 students mentored vs. 35-50 national average. 
+                    Students learn quantitative approaches to biological questions, develop technical skills across multiple systems, and gain research independence.
+                </p>
+                <a href="https://agvg75.github.io/vidal-gadea-lab-dashboard/" class="dashboard-link" target="_blank">
+                    View Detailed Student Mentoring Dashboard
+                </a>
             </div>
-        </div>
+        </section>
 
-        <div class="section">
-            <h2>Research Impact</h2>
-            <div class="impact-grid">
-                <div class="impact-item">
-                    <div class="impact-number">66+</div>
-                    <div class="impact-description">Student co-authorships on peer-reviewed publications</div>
+        <section class="section">
+            <h2>Media Coverage and Science Communication</h2>
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <div class="tool-category">Major Media Features</div>
+                    <div class="tool-description">
+                        NPR, NBC News, Scientific American, Nature Reviews, The Scientist, Medical Press, RAI (Italy), El País (Uruguay), Pantagraph, 25News
+                    </div>
                 </div>
-                <div class="impact-item">
-                    <div class="impact-number">200+</div>
-                    <div class="impact-description">Conference presentations by trainees</div>
+                <div class="tool-card">
+                    <div class="tool-category">Digital Science Communication</div>
+                    <div class="tool-description">
+                        71+ research videos on YouTube with 36,000+ views, comprehensive web portfolio, interactive research dashboards, science outreach coloring book
+                    </div>
                 </div>
-                <div class="impact-item">
-                    <div class="impact-number">90%+</div>
-                    <div class="impact-description">STEM career placement rate</div>
-                </div>
-                <div class="impact-item">
-                    <div class="impact-number">71</div>
-                    <div class="impact-description">Research videos (35K+ educational views)</div>
-                </div>
-                <div class="impact-item">
-                    <div class="impact-number">3</div>
-                    <div class="impact-description">Integrated research programs with clinical applications</div>
-                </div>
-                <div class="impact-item">
-                    <div class="impact-number">6</div>
-                    <div class="impact-description">Major media features (NPR, NBC, Nature Reviews, Scientific American)</div>
+                <div class="tool-card">
+                    <div class="tool-category">Public Engagement</div>
+                    <div class="tool-description">
+                        Regular K-12 science education programming, podcast appearances, community science events, educational resource development
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="section">
-            <h2>Citation Impact Over Time</h2>
-            <div class="chart-container">
-                <canvas id="citationsChart"></canvas>
-            </div>
-        </div>
+        <footer>
+            <p>Vidal-Gadea Lab | Illinois State University | School of Biological Sciences</p>
+            <p>Website: <a href="https://about.illinoisstate.edu/avidal/" target="_blank">about.illinoisstate.edu/avidal</a></p>
+            <p>Research Dashboard: <a href="https://agvg75.github.io/research_impact_dashboard/" target="_blank">agvg75.github.io/research_impact_dashboard</a></p>
+            <p>Mentoring Dashboard: <a href="https://agvg75.github.io/vidal-gadea-lab-dashboard/" target="_blank">agvg75.github.io/vidal-gadea-lab-dashboard</a></p>
+        </footer>
     </div>
 
     <script>
+        const ctx = document.getElementById('citationChart').getContext('2d');
+        
         const colors = {
-            primary: '#c8102e',
-            secondary: '#333333',
-            accent: '#666666',
-            light: '#e0e0e0'
+            primary: '#C8102E',
+            secondary: '#8B0000',
+            grid: '#e0e0e0'
         };
-
-        // Publications per year (actual data from CV)
-        const pubYears = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
-        const pubCounts = [3, 2, 0, 1, 2, 1, 3, 4, 2, 2, 2];
-
-        new Chart(document.getElementById('publicationsChart'), {
-            type: 'bar',
-            data: {
-                labels: pubYears,
-                datasets: [{
-                    label: 'Publications',
-                    data: pubCounts,
-                    backgroundColor: colors.primary,
-                    borderColor: colors.primary,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: 'Publications per Year',
-                        font: { size: 14 }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: { stepSize: 1 }
-                    }
-                }
-            }
-        });
-
-        // Cumulative publications
-        const cumulativePubs = pubCounts.reduce((acc, val, i) => {
-            acc.push((acc[i-1] || 0) + val);
-            return acc;
-        }, []);
-
-        new Chart(document.getElementById('cumulativePubsChart'), {
+        
+        new Chart(ctx, {
             type: 'line',
             data: {
-                labels: pubYears,
+                labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'],
                 datasets: [{
-                    label: 'Cumulative Publications',
-                    data: cumulativePubs,
-                    borderColor: colors.primary,
-                    backgroundColor: 'rgba(200, 16, 46, 0.1)',
-                    fill: true,
-                    tension: 0.3,
-                    pointRadius: 4,
-                    pointBackgroundColor: colors.primary
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: 'Cumulative Publications',
-                        font: { size: 14 }
-                    }
-                },
-                scales: {
-                    y: { beginAtZero: true }
-                }
-            }
-        });
-
-        // Funding timeline (active grants by year)
-        const fundingYears = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
-        const startup = [58333, 58333, 58334, 0, 0, 0, 0, 0, 0, 0, 0];
-        const nihR15 = [0, 100777, 100777, 100777, 100778, 0, 0, 0, 0, 0, 0];
-        const nsfMCB = [0, 0, 0, 106434, 106434, 106434, 106434, 106434, 106434, 0, 0];
-        const nihNIAMS = [0, 0, 0, 0, 0, 0, 0, 93848, 93848, 93848, 93849];
-
-        new Chart(document.getElementById('fundingChart'), {
-            type: 'bar',
-            data: {
-                labels: fundingYears,
-                datasets: [
-                    {
-                        label: 'Startup (2015-2017)',
-                        data: startup,
-                        backgroundColor: '#999999'
-                    },
-                    {
-                        label: 'NIH R15 (2016-2019)',
-                        data: nihR15,
-                        backgroundColor: '#c8102e'
-                    },
-                    {
-                        label: 'NSF MCB (2018-2024)',
-                        data: nsfMCB,
-                        backgroundColor: '#333333'
-                    },
-                    {
-                        label: 'NIH NIAMS (2022-2025)',
-                        data: nihNIAMS,
-                        backgroundColor: '#666666'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Active Grant Funding by Year',
-                        font: { size: 14 }
-                    },
-                    legend: {
-                        position: 'bottom'
-                    }
-                },
-                scales: {
-                    x: { stacked: true },
-                    y: {
-                        stacked: true,
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return '$' + (value/1000).toFixed(0) + 'K';
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Cumulative students by level (exact data from lab records)
-        const cumulativeYears = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
-        const cumulativePostdoc = [0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2];
-        const cumulativeGrad = [2, 3, 6, 9, 10, 12, 13, 18, 18, 20, 20];
-        const cumulativeUG = [22, 41, 56, 66, 81, 85, 89, 95, 97, 104, 114];
-        const cumulativeHS = [7, 23, 34, 37, 59, 60, 67, 77, 79, 80, 84];
-
-        new Chart(document.getElementById('cumulativeStudentsChart'), {
-            type: 'bar',
-            data: {
-                labels: cumulativeYears,
-                datasets: [
-                    {
-                        label: 'High School',
-                        data: cumulativeHS,
-                        backgroundColor: '#cccccc'
-                    },
-                    {
-                        label: 'Undergraduate',
-                        data: cumulativeUG,
-                        backgroundColor: '#999999'
-                    },
-                    {
-                        label: 'Graduate',
-                        data: cumulativeGrad,
-                        backgroundColor: '#666666'
-                    },
-                    {
-                        label: 'Postdoctoral',
-                        data: cumulativePostdoc,
-                        backgroundColor: '#c8102e'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Cumulative Students Mentored by Level',
-                        font: { size: 14 }
-                    },
-                    legend: {
-                        position: 'bottom'
-                    }
-                },
-                scales: {
-                    x: { stacked: true },
-                    y: {
-                        stacked: true,
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Cumulative Students'
-                        }
-                    }
-                }
-            }
-        });
-
-        // Citations over time (estimated trajectory)
-        const citationYears = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
-        const citationCounts = [45, 68, 92, 115, 145, 178, 235, 310, 425, 580, 913];
-
-        new Chart(document.getElementById('citationsChart'), {
-            type: 'line',
-            data: {
-                labels: citationYears,
-                datasets: [{
-                    label: 'Total Citations',
-                    data: citationCounts,
+                    label: 'Cumulative Citations',
+                    data: [150, 220, 310, 420, 520, 610, 690, 760, 820, 890, 962],
                     borderColor: colors.primary,
                     backgroundColor: 'rgba(200, 16, 46, 0.1)',
                     fill: true,
@@ -549,15 +720,29 @@
                     legend: { display: false },
                     title: {
                         display: true,
-                        text: 'Cumulative Citations (Estimated Growth Pattern)',
+                        text: 'Cumulative Citations Growth (2015-2025)',
                         font: { size: 14 }
                     }
                 },
                 scales: {
-                    y: { beginAtZero: true }
+                    y: { 
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Total Citations'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Year'
+                        }
+                    }
                 }
             }
         });
     </script>
+</body>
+</html>
 </body>
 </html>
