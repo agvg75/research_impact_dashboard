@@ -385,20 +385,20 @@
 
         <div class="metrics-grid">
             <div class="metric-card">
-                <div class="metric-value">30</div>
-                <div class="metric-label">Peer-Reviewed Publications</div>
+                <div class="metric-value">31</div>
+                <div class="metric-label">Peer-reviewed publications<br><span style="font-size:9pt;opacity:.75">ISU publications page, Oct 2026</span></div>
             </div>
             <div class="metric-card">
                 <div class="metric-value">1,046</div>
-                <div class="metric-label">Total Citations</div>
+                <div class="metric-label">Citations<br><span style="font-size:9pt;opacity:.75">Google Scholar. OpenAlex gives 762</span></div>
             </div>
             <div class="metric-card">
                 <div class="metric-value">15</div>
-                <div class="metric-label">h-index</div>
+                <div class="metric-label">h-index<br><span style="font-size:9pt;opacity:.75">Google Scholar. OpenAlex gives 12</span></div>
             </div>
             <div class="metric-card">
                 <div class="metric-value">$2.0 M</div>
-                <div class="metric-label">Total Research Funding (PI)</div>
+                <div class="metric-label">Research funding as PI<br><span style="font-size:9pt;opacity:.75">$2,004,842, verified Oct 2026</span></div>
             </div>
         </div>
 
@@ -631,29 +631,59 @@
                 <h3 style="margin-bottom: 20px; font-size: 16pt;">Transformative Educational Impact (2015-2025)</h3>
                 <div class="mentoring-stats">
                     <div class="mentoring-stat">
-                        <div class="mentoring-stat-value">224</div>
-                        <div class="mentoring-stat-label">Total Students Mentored</div>
+                        <div class="mentoring-stat-value" id="mTrained">&ndash;</div>
+                        <div class="mentoring-stat-label">People trained since 2015</div>
                     </div>
                     <div class="mentoring-stat">
-                        <div class="mentoring-stat-value">572+</div>
-                        <div class="mentoring-stat-label">Total Student Outputs</div>
+                        <div class="mentoring-stat-value" id="mKnown">&ndash;</div>
+                        <div class="mentoring-stat-label">Alumni whose destination is recorded</div>
                     </div>
                     <div class="mentoring-stat">
-                        <div class="mentoring-stat-value">200+</div>
-                        <div class="mentoring-stat-label">Conference Presentations</div>
+                        <div class="mentoring-stat-value" id="mStem">&ndash;</div>
+                        <div class="mentoring-stat-label">Of those, continued in STEM</div>
                     </div>
                     <div class="mentoring-stat">
-                        <div class="mentoring-stat-value">90%+</div>
-                        <div class="mentoring-stat-label">STEM Career Placement</div>
+                        <div class="mentoring-stat-value">17 of 23</div>
+                        <div class="mentoring-stat-label">Lab papers with a trainee as first author</div>
                     </div>
                 </div>
                 <p style="margin-top: 20px; font-size: 11pt;">
-                    Lab performance dramatically exceeds national averages: 216 students mentored vs. 35-50 national average. 
-                    Students learn quantitative approaches to biological questions, develop technical skills across multiple systems, and gain research independence.
+                    These figures are read live from the roster that drives the lab website, so this page
+                    and that one cannot disagree. No national benchmark exists for trainees mentored at
+                    any institutional tier, so no comparison is offered here.
                 </p>
                 <a href="https://agvg75.github.io/vidal-gadea-lab-dashboard/" class="dashboard-link" target="_blank">
                     View Detailed Student Mentoring Dashboard
                 </a>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Where this record sits</h2>
+            <div class="philosophy-box">
+                <p><strong>Publication position.</strong> 16 journal articles 2015 to 2026 in life
+                science fields carrying an Illinois State affiliation. Among the 98 Illinois State
+                authors with five or more such articles, the median is 7 and the 90th percentile is 16.
+                Pooled across nine Midwest public doctoral comprehensives, 507 authors, the figure sits
+                at the 92.7th percentile.</p>
+                <p style="margin-top:14px"><strong>Against research intensive universities.</strong> An
+                h-index of 12 is reached by 7.0 percent of life science authors at Illinois State and by
+                11.6 to 14.0 percent at six large research universities, so the same record would sit
+                near the 88th percentile there. Output per senior investigator is 7.1 articles here
+                against 5.3 to 9.6 across those six. The difference in total output between institution
+                types is mostly a difference in how many laboratories there are.</p>
+                <p style="margin-top:14px"><strong>Output per dollar.</strong> NIGMS reports that the
+                median investigator holding an R01 or P01 runs $220,000 in annual direct costs and
+                publishes 1.71 papers a year. This laboratory runs $145,117 a year and publishes 2.09,
+                which is at least 1.85 times the publications per funded dollar. At least, because the
+                NIGMS figure is direct costs and this one is total award dollars.</p>
+                <p style="margin-top:14px"><strong>Authorship.</strong> 71 percent of papers in the
+                window are first or last authored, against a median of 50 percent among the 63 senior
+                life science authors at this institution.</p>
+                <p style="margin-top:14px; font-size:10pt; opacity:.8">Every figure above is
+                reproducible from the queries recorded in VGL_BENCHMARKING_REFERENCE. Sources: OpenAlex,
+                NIH RePORTER, NIGMS Feedback Loop. Student mentoring has no national benchmark and is
+                reported in absolute terms only.</p>
             </div>
         </section>
 
@@ -742,7 +772,20 @@
             }
         });
     </script>
-</body>
-</html>
+<script>
+(function(){
+  fetch('/lab/students.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{
+    var st=d.students||d;
+    var PH=/^(undergraduate researcher|high school researcher|graduate researcher|current|college|student|unknown|n\/?a|\?|high school graduate|)$/i;
+    var alum=st.filter(s=>s.status==='Alumni');
+    var known=alum.filter(s=>!PH.test((s.currentPosition||'').trim()));
+    var stem=known.filter(s=>(s.stemCareer||'').toLowerCase()==='yes');
+    var no=known.filter(s=>(s.stemCareer||'').toLowerCase()==='no');
+    document.getElementById('mTrained').textContent=st.length;
+    document.getElementById('mKnown').textContent=Math.round(100*known.length/alum.length)+'%';
+    document.getElementById('mStem').textContent=(100*stem.length/(stem.length+no.length)).toFixed(1)+'%';
+  }).catch(function(){});
+})();
+</script>
 </body>
 </html>
