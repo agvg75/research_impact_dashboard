@@ -365,7 +365,7 @@
             <h1>Vidal-Gadea Lab Research Impact Dashboard</h1>
             <div class="subtitle">Professor Andrés G. Vidal-Gadea, Ph.D.</div>
             <div class="subtitle">School of Biological Sciences, Illinois State University</div>
-            <div class="last-updated">Last updated: December 2025</div>
+            <div class="last-updated">Last updated: November 2026</div>
         </header>
 
         <div class="career-timeline">
@@ -390,11 +390,11 @@
             </div>
             <div class="metric-card">
                 <div class="metric-value">1,046</div>
-                <div class="metric-label">Citations<br><span style="font-size:9pt;opacity:.75">Google Scholar. OpenAlex gives 762</span></div>
+                <div class="metric-label">Citations<br><span style="font-size:9pt;opacity:.75">Google Scholar. OpenAlex gives 756 (Nov 2026)</span></div>
             </div>
             <div class="metric-card">
                 <div class="metric-value">15</div>
-                <div class="metric-label">h-index<br><span style="font-size:9pt;opacity:.75">Google Scholar. OpenAlex gives 12</span></div>
+                <div class="metric-label">h-index<br><span style="font-size:9pt;opacity:.75">Google Scholar. OpenAlex gives 13 (Nov 2026)</span></div>
             </div>
             <div class="metric-card">
                 <div class="metric-value">$2.0 M</div>
@@ -520,12 +520,17 @@
         </section>
 
         <section class="section">
-            <h2>Recent Publications (2025)</h2>
+            <h2>Recent Publications</h2>
             <div class="publication-list">
+                <div class="publication-item">
+                    <div class="pub-title">Behavioral deficits in C. elegans raised for six generations under Mars-analog gravity and hypomagnetic fields</div>
+                    <div class="pub-authors">Akinosho A, Armstrong N, Benefield Z, Dai X, Stein W, Vidal-Gadea AG</div>
+                    <div class="pub-journal"><a href="https://doi.org/10.1038/s41598-026-78119-8" target="_blank">Scientific Reports (2026)</a></div>
+                </div>
                 <div class="publication-item">
                     <div class="pub-title">Activity-dependent remodeling of muscle architecture during distinct locomotor behaviors in C. elegans</div>
                     <div class="pub-authors">Fazyl A, Anbu A, Kollbaum S, Vidal-Gadea AG</div>
-                    <div class="pub-journal">Biology Open (2025) - Accepted</div>
+                    <div class="pub-journal"><a href="https://doi.org/10.1242/bio.062371" target="_blank">Biology Open 15 (2026)</a></div>
                 </div>
                 <div class="publication-item">
                     <div class="pub-title">Fibrillin-Related Proteins Control Calcium Homeostasis in Dystrophic Muscle Across Species</div>
@@ -628,7 +633,7 @@
         <section class="section">
             <h2>Student Mentoring Excellence</h2>
             <div class="mentoring-highlight">
-                <h3 style="margin-bottom: 20px; font-size: 16pt;">Transformative Educational Impact (2015-2025)</h3>
+                <h3 style="margin-bottom: 20px; font-size: 16pt;">Transformative Educational Impact (2015-2026)</h3>
                 <div class="mentoring-stats">
                     <div class="mentoring-stat">
                         <div class="mentoring-stat-value" id="mTrained">&ndash;</div>
@@ -652,8 +657,8 @@
                     and that one cannot disagree. No national benchmark exists for trainees mentored at
                     any institutional tier, so no comparison is offered here.
                 </p>
-                <a href="https://agvg75.github.io/vidal-gadea-lab-dashboard/" class="dashboard-link" target="_blank">
-                    View Detailed Student Mentoring Dashboard
+                <a href="https://agvg75.github.io/lab/alumni.html" class="dashboard-link" target="_blank">
+                    View alumni and outcomes on the lab website
                 </a>
             </div>
         </section>
@@ -715,7 +720,7 @@
             <p>Vidal-Gadea Lab | Illinois State University | School of Biological Sciences</p>
             <p>Website: <a href="https://about.illinoisstate.edu/avidal/" target="_blank">about.illinoisstate.edu/avidal</a></p>
             <p>Research Dashboard: <a href="https://agvg75.github.io/research_impact_dashboard/" target="_blank">agvg75.github.io/research_impact_dashboard</a></p>
-            <p>Mentoring Dashboard: <a href="https://agvg75.github.io/vidal-gadea-lab-dashboard/" target="_blank">agvg75.github.io/vidal-gadea-lab-dashboard</a></p>
+            <p>Alumni and outcomes: <a href="https://agvg75.github.io/lab/alumni.html" target="_blank">agvg75.github.io/lab/alumni.html</a></p>
         </footer>
     </div>
 
@@ -731,10 +736,10 @@
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'],
+                labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026'],
                 datasets: [{
                     label: 'Cumulative Citations',
-                    data: [150, 220, 310, 420, 520, 610, 690, 760, 820, 890, 962],
+                    data: [150, 220, 310, 420, 520, 610, 690, 760, 820, 890, 962, 1046],
                     borderColor: colors.primary,
                     backgroundColor: 'rgba(200, 16, 46, 0.1)',
                     fill: true,
@@ -750,7 +755,7 @@
                     legend: { display: false },
                     title: {
                         display: true,
-                        text: 'Cumulative Citations Growth (2015-2025)',
+                        text: 'Cumulative Citations Growth (2015-2026)',
                         font: { size: 14 }
                     }
                 },
